@@ -1,0 +1,468 @@
+<!------------------------------------------------- NAV BAR HEADER --------------------------------------------------->
+<header>
+  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container">
+      <a class="navbar-brand" [routerLink]="['/']">Shopping Portal</a>
+      <button class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target=".navbar-collapse"
+              aria-label="Toggle navigation"
+              [attr.aria-expanded]="isExpanded"
+              (click)="toggle()">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
+           [ngClass]="{ show: isExpanded }">
+        <ul class="navbar-nav flex-grow">
+          <li *ngIf="ShowControls">
+            <div class="d-flex flex-row">
+              <input [(ngModel)]="ProductNameFilter" class="form-control" (keyup)="FilterFn()" placeholder="Filter Products">
+            </div>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark">
+              &nbsp;&nbsp;
+            </a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']" *ngIf="ShowControls">
+            Sort Price
+            <button type="button" class="btn btn-light" (click)="sortResult('Price',true)" style="background-color: white;">
+              <svg width=".8em" height=".8em" viewBox="0 0 16 16" class="bi bi-sort-down-alt" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M3 3a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0v-10A.5.5 0 0 1 3 3z" />
+                <path fill-rule="evenodd" d="M5.354 11.146a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L3 12.793l1.646-1.647a.5.5 0 0 1 .708 0zM7 6.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5zm0 3a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 0-1h-5a.5.5 0 0 0-.5.5zm0 3a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5zm0-9a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0-.5.5z" />
+              </svg>
+            </button>
+            <button type="button" class="btn btn-light" (click)="sortResult('Price',false)" style="background-color: white;">
+              <svg width=".8em" height=".8em" viewBox="0 0 16 16" class="bi bi-sort-up-alt" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M3 14a.5.5 0 0 0 .5-.5v-10a.5.5 0 0 0-1 0v10a.5.5 0 0 0 .5.5z" />
+                <path fill-rule="evenodd" d="M5.354 5.854a.5.5 0 0 0 0-.708l-2-2a.5.5 0 0 0-.708 0l-2 2a.5.5 0 1 0 .708.708L3 4.207l1.646 1.647a.5.5 0 0 0 .708 0zM7 6.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5zm0 3a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 0-1h-5a.5.5 0 0 0-.5.5zm0 3a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5zm0-9a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0-.5.5z" />
+              </svg>
+            </button>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']" *ngIf="ShowControls">
+            <button type="button" (click)="changeProductListView()"class="btn btn-light">Chage View</button>            
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
+            <a>Cart</a>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart" (click)="showCart()" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+            </svg>
+            <a class="icon-shopping-cart" style="font-size: 25px"><label id="lblCartCount" CssClass="badge badge-warning" ForeColor="White">{{totalQty}}</label></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+<!------------------------------------------------ NAV BAR HEADER END ------------------------------------------------------------------------------->
+<!------------------------------------------------ GRID VIEW ITEM LIST START ------------------------------------------------------------------------------->
+<div class="container">
+
+
+  <div class="row px-5 pt-5" *ngIf="ProductsGridView">
+    <div class="col-md-4 mt-4 mt-sm-0 card-container" *ngFor="let dataItem of ProductList">
+      <div class="card text-center product p-4 pt-5 border-0 h-100 rounded-0">
+        <img class="img-fluid d-block mx-auto" [src]="'/assets/Photos/'+ dataItem.ImageName">
+        <div class="card-body p-4 py-0 h-xs-440p">
+          <h5 class="card-title font-weight-semi-bold mb-3 w-xl-220p mx-auto">{{dataItem.ProductName}}</h5>
+          <p class="price">${{dataItem.Price}}</p>
+        </div>
+        <p class="btn w-100 px-4 mx-auto">
+          <input type="button" class="btn btn-dark btn-lg w-100" (click)="addProductsToCart(dataItem)" value="Add To Cart">
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!------------------------------------------------ GRID VIEW ITEM LIST END ------------------------------------------------------------------------------->
+  <!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+  <!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+  <!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+  <!-- ------------------------------------------------PRODUCTS LIST VIEW START-------------------------------------------------------------------------------------------------------- -->
+  <table class="table table-striped" *ngIf="ProductsListView">
+    <thead>
+      <tr>
+        <th>
+          Image
+        </th>
+
+        <th>
+          Product Name
+        </th>
+        <th>
+
+          <div class="d-flex flex-row">
+            Price
+          </div>
+
+        </th>
+        <th>Options</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let dataItem of ProductList">
+        <td><img [src]="'/assets/Photos/'+ dataItem.ImageName" height="150px" width="200px;"></td>
+        <td>{{dataItem.ProductName}}
+          <br>
+          <small class="text-muted">{{dataItem.Description}}</small>
+        </td>
+        <td>${{dataItem.Price}}</td>
+        <td>
+          <button type="button" class="btn btn-light mr-1"
+                  data-toggle="modal" data-target="#exampleModal"
+                  data-backdrop="static" data-keyboard="false" (click)="addProductsToCart(dataItem)">
+            Add To Cart
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+<!-- ------------------------------------------------PRODUCTS LIST VIEW END-------------------------------------------------------------------------------------------------------- -->
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+<!------------------------------------------------ SHOPPING CART LIST START ------------------------------------------------------------------------------->
+<div class="container" *ngIf="CartDetailsTable">
+  <table id="tblContainer" style='width: 99%;table-layout:fixed;'>
+    <tr>
+      <td>
+
+        <table width="100%">
+          <tr>
+            <td>
+              <table style="background-color:#FFFFFF;  padding: 5px;width: 100%;table-layout:fixed;" cellpadding="2" cellspacing="2">
+                <tr style="height: 30px;  color:#123455 ;border: solid 1px #659EC7;">
+                  <td width="40px"> </td>
+                  <td width="60%">
+                    <h1> Items in your cart <strong style="color:#0094ff"> {{totalQty}}</strong></h1>
+                  </td>
+                  <td align="right">
+                    <button (click)=showProductList() style="background-color:#0094ff;color:#FFFFFF;font-size:large;width:300px;height:50px;
+                          border-color:#a2aabe;border-style:dashed;border-width:2px;">
+                      Continue Shopping
+                    </button>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <table style="background-color:#FFFFFF; border:solid 2px #6D7B8D;padding: 5px;width: 100%;table-layout:fixed;" cellpadding="2" cellspacing="2">
+                <tr style="height: 30px; background-color:#336699 ; color:#FFFFFF ;border: solid 1px #659EC7;">
+                  <td width="40" align="center" style="border: solid 1px #FFFFFF; padding: 5px;table-layout:fixed;cursor: pointer;">S.No</td>
+                  <td width="80" align="center">
+                    <b>Image</b>
+                  </td>
+                  <td width="180" align="center" style="border: solid 1px #FFFFFF; padding: 5px;table-layout:fixed;cursor: pointer;">
+                    <b>Product Name</b>
+                  </td>
+                  <td width="300" align="center" style="border: solid 1px #FFFFFF; padding: 5px;table-layout:fixed;cursor: pointer;">
+                    <b>Description</b>
+                  </td>
+                  <td width="80" align="center" style="border: solid 1px #FFFFFF; padding: 5px;table-layout:fixed;cursor: pointer;">
+                    <b>Price</b>
+                  </td>
+                  <td width="70" align="center" style="border: solid 1px #FFFFFF; padding: 5px;table-layout:fixed;cursor: pointer;">
+                    <b>Quantity</b>
+                  </td>
+                  <td width="150" align="center" style="border: solid 1px #FFFFFF; padding: 5px;table-layout:fixed;cursor: pointer;">
+                    <b>Total Price</b>
+                  </td>
+                </tr>
+
+                <tbody *ngFor="let dataItem of cartDetails ; let i = index">
+
+                  <tr>
+                    <td style="border: solid 1px #659EC7; padding: 5px;table-layout:fixed;" align="center">
+                      {{i+1}}
+                    </td>
+                    <td align="center" style="border: solid 1px #659EC7; padding: 5px;table-layout:fixed;">
+                      <span style="color:#9F000F">
+                        <img [src]="'/assets/Photos/'+ dataItem.ImageName" style="height:56px;width:56px">
+                      </span>
+                    </td>
+                    <td style="border: solid 1px #659EC7; padding: 5px;table-layout:fixed;">
+                      <span style="color:#9F000F">
+                        {{dataItem.ProductName}}
+                      </span>
+                    </td>
+
+                    <td style="border: solid 1px #659EC7; padding: 5px;table-layout:fixed;">
+                      <span style="color:#9F000F">
+                        {{dataItem.Description}}
+                      </span>
+                    </td>
+
+                    <td align="right" style="border: solid 1px #659EC7; padding: 5px;table-layout:fixed;">
+                      <span style="color:#9F000F">
+                        ${{dataItem.Price}}
+                      </span>
+                    </td>
+
+                    <td align="right" style="border: solid 1px #659EC7; padding: 5px;table-layout:fixed;">
+                      <span style="color:#9F000F">
+                        {{dataItem.ProductQuantity}}
+                      </span>
+                    </td>
+
+                    <td style="border: solid 1px #659EC7; padding: 5px;table-layout:fixed;" align="right">
+                      <span style="color:#9F000F">
+                        ${{ dataItem.Price * dataItem.ProductQuantity }}
+                      </span>
+                    </td>
+
+                    <td align="bottom">
+                      <button (click)=removeFromCart(i) class="btn btn-warning btn-sm">
+                        Remove from Cart
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+                <tr>
+                  <td colspan="5" height="40" align="right"><strong>Total </strong></td>
+                  <td align="right" height="40"><strong>Qty : {{ totalQty | number}}</strong></td>
+                  <td align="right" height="40"><strong>Sum: ${{ GrandtotalPrice}}</strong></td>
+                  <td align="right">
+                    <button (click)=proceedToCart() class="btn btn-success btn-sm">
+                      Proceed to Checkout
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr *ngIf="checkoutWithoutProducts">
+      <h6><span class="lbl-danger">Please add items to proceed to Checkout!</span></h6>
+    </tr>
+  </table>
+</div>
+  <!------------------------------------------------ SHOPPING CART LIST END ------------------------------------------------------------------------------->
+  <!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+  <!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+  <!------------------------------------------------ CHECK-OUT FORM ------------------------------------------------------------------------------->
+
+
+
+  <div class="container" *ngIf="CheckoutWindow">
+    <div class="py-5 text-center">
+      <h2>Checkout form</h2>
+      <p class="lead">Please enter your shipping & payment details to place an order.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 order-md-2 mb-4">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-muted">Your cart</span>
+          <span class="badge badge-secondary badge-pill">{{totalQty}}</span>
+        </h4>
+        <ul class="list-group mb-3">
+          <li class="list-group-item d-flex justify-content-between lh-condensed" *ngFor="let dataItem of cartDetails">
+            <div>
+              <h6 class="my-0">{{dataItem.ProductName}}<span> x {{dataItem.ProductQuantity}}</span></h6>
+              <small class="text-muted">{{dataItem.Description}}</small>
+            </div>
+            <span class="text-muted">${{dataItem.Price*dataItem.ProductQuantity}}</span>
+          </li>
+
+          <li class="list-group-item d-flex justify-content-between">
+            <strong>Total (USD)</strong>
+            <strong>${{GrandtotalPrice}}</strong>
+          </li>
+        </ul>
+
+        <!-- <form class="card p-2">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Promo code">
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-secondary">Redeem</button>
+            </div>
+          </div>
+        </form> -->
+      </div>
+      <div class="col-md-8 order-md-1">
+<!----------------------------------------------------------------------------------------BILLING ADDRESS START---------------------------------------------------------------------------------------->
+        <h4 class="mb-3">Billing address</h4>
+        <!-- ngNativeValidate -->
+        <form class="needs-validation" ngNativeValidate #form>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label>First name</label>
+              <input type="text" class="form-control" placeholder="" value="" required=""
+               [(ngModel)]="FirstName" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Last name</label>
+              <input type="text" class="form-control" placeholder="" value="" required="" [(ngModel)]="LastName" [ngModelOptions]="{standalone: true}">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label>Email</label>
+            <input type="email" class="form-control" placeholder="you@example.com" required="" [(ngModel)]="Email" [ngModelOptions]="{standalone: true}">
+          </div>
+
+          <div class="mb-3">
+            <label>Address</label>
+            <input type="text" class="form-control" placeholder="1234 Main St" required="" [(ngModel)]="Address" [ngModelOptions]="{standalone: true}">
+            <div class="invalid-feedback">
+              Please enter your shipping address.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label>Address 2 <span class="text-muted">(Optional)</span></label>
+            <input type="text" class="form-control" placeholder="Apartment or suite" [(ngModel)]="Address2" [ngModelOptions]="{standalone: true}">
+          </div>
+
+          <div class="row">
+            <div class="col-md-5 mb-3">
+              <label for="country">Country</label>
+              <select class="custom-select d-block w-100" id="country" required [(ngModel)]="Country" [ngModelOptions]="{standalone: true}">
+                <option>Choose...</option>
+                <option>United States</option>
+                <option>Canada</option>
+                <option>Mexico</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>State</label>
+              <input type="text" class="form-control" required [(ngModel)]="State" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>City</label>
+              <input type="text" class="form-control" required [(ngModel)]="City" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col-md-3 mb-3">
+              <label>Zip</label>
+              <input type="text" class="form-control" required [(ngModel)]="Zip" [ngModelOptions]="{standalone: true}">
+             </div>
+          </div>
+          <hr class="mb-4">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" (change)="enableDisableShipping($event)" class="custom-control-input" id="same-address">
+            <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
+          </div>
+          <hr class="mb-4">
+          <!--------------------------------------------------------------------------------BILLING ADDRESS END---------------------------------------------------------------------------------------->
+          <!--------------------------------------------------------------------------------SHIPPING ADDRESS START---------------------------------------------------------------------------------------->
+          <div *ngIf="hideShippingAddress">
+            <h4 class="mb-3">Shipping address</h4>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="sfirstName">First name</label>
+                <input type="text" class="form-control" id="sfirstName" placeholder="" value="" >
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="slastName">Last name</label>
+                <input type="text" class="form-control" id="slastName" placeholder="" value="" >
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="semail">Email</label>
+              <input type="email" class="form-control" id="semail" placeholder="you@example.com" >
+            </div>
+
+            <div class="mb-3">
+              <label for="saddress">Address</label>
+              <input type="text" name="Address1" class="form-control" id="saddress" placeholder="1234 Main St" >
+              <div class="invalid-feedback">
+                Please enter your shipping address.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="saddress2">Address 2 <span class="text-muted">(Optional)</span></label>
+              <input type="text" class="form-control" id="saddress2" placeholder="Apartment or suite">
+            </div>
+
+            <div class="row">
+              <div class="col-md-5 mb-3">
+                <label for="scountry">Country</label>
+                <select class="custom-select d-block w-100" id="scountry" >
+                  <option value="">Choose...</option>
+                  <option>United States</option>
+                </select>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="sstate">State</label>
+                <input type="text" class="form-control" id="sstate" >
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="szip">Zip</label>
+                <input name="zip" type="text" class="form-control" id="szip" >
+              </div>
+            </div>
+          </div>
+
+          <hr class="mb-4">
+          <!----------------------------------------------------------------------------------------SHIPPING ADDRESS END---------------------------------------------------------------------------------------->
+          <h4 class="mb-3">Payment</h4>
+
+          <div class="d-block my-3">
+            <div class="custom-control custom-radio">
+              <input id="credit" name="paymentMethod" value="CREDIT" type="radio" class="custom-control-input" (change)="onItemChange($event.target.value)">
+              <label class="custom-control-label" for="credit">Credit card</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input id="debit" name="paymentMethod" value="DEBIT" type="radio" class="custom-control-input" (change)="onItemChange($event.target.value)">
+              <label class="custom-control-label" for="debit">Debit card</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="cc-name">Name on card</label>
+              <input type="text" class="form-control" id="cc-name" placeholder="" required [(ngModel)]="NameOnCard" [ngModelOptions]="{standalone: true}">
+              <small class="text-muted">Full name as displayed on card</small>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="cc-number">Card Number</label>
+              <input type="number" class="form-control" id="cc-number" placeholder="" required  [(ngModel)]="CardNumber" [ngModelOptions]="{standalone: true}">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3 mb-3">
+              <label for="cc-expiration">Expiration</label>
+              <input type="text" class="form-control" id="cc-expiration" placeholder="" required="" [(ngModel)]="Expiration" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="cc-expiration">CVV</label>
+              <input type="number" class="form-control" id="cc-cvv" placeholder="" required="" [(ngModel)]="CVV" [ngModelOptions]="{standalone: true}">
+            </div>
+          </div>
+          <hr class="mb-5">
+          <button  class="btn btn-success btn-lg btn-block" (click)="form.checkValidity()? placeOrder() : null" type="submit">Place an order</button>
+          
+        </form>
+        <span style="color: tomato;"><h4><i>{{LabelMessage}}</i></h4></span>
+        
+      </div>
+    </div>
+
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+      <p class="mb-1">© 2020 Shopping Portal</p>
+      <ul class="list-inline">
+        <li class="list-inline-item"><a href="#">Privacy</a></li>
+        <li class="list-inline-item"><a href="#">Terms</a></li>
+        <li class="list-inline-item"><a href="#">Support</a></li>
+      </ul>
+    </footer>
+  </div>
